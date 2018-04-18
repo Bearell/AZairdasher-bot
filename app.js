@@ -90,6 +90,7 @@ client.on('message', message => {
 
         if(rand == 1)
         {
+            message.channel.send("SSR COMFY!!!");
             picture = "./images/comfiest.jpg";
         }
         else if (rand > 1 && rand <= 60 )
