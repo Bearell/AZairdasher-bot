@@ -36,7 +36,12 @@ npm install
 ```
 settings.json 
 ```
-...to store the token in. See example_settings.json
+...to store the token in. See example_settings.json for an example. (Ask me for the token)
+
+
+### Running
+
+-Bot is currently being run on Dejixal's machine. Pushed changes will be automatically pulled into the dedicated host
 
 ## Built With
 
