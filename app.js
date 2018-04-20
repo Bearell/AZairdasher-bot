@@ -32,6 +32,15 @@ client.on('message', message => {
         return;
     }*/
 
+	//Parse and split into vars. the base command is command, args[] are each argument spaced out
+	const args = message.content.slice(prefix.length).trim().split(/ +/g);
+	const command = args.shift().toLowerCase();
+	
+	//print args and command to console for testing
+	client.log("Command: " + command);
+	client.log("Arg 1 : " + args[1]);
+	client.log("Arg 2 : " + args[2);
+	
     //command 1
     if(message.content.startsWith(prefix + 'hi')){
         message.channel.send("Hello, I am Jimmy Bot");
