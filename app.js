@@ -54,6 +54,12 @@ client.on('message', message => {
         {
             let prisoner = message.mentions.members.first();
 
+            if(prisoner == null)
+            {
+                message.channel.send("User does not exist");
+                return;
+            }
+
             prisoner.addRole("374686400307789824").catch(console.error);
 
             message.channel.send("Sending " + prisoner.displayName + " to UAT");
@@ -73,6 +79,12 @@ client.on('message', message => {
         if(message.member.roles.find("name", "admins"))
         {
             let prisoner = message.mentions.members.first();
+
+            if(prisoner == null)
+            {
+                message.channel.send("User does not exist");
+                return;
+            }
 
             prisoner.removeRole("374686400307789824").catch(console.error);
             
