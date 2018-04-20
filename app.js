@@ -37,9 +37,9 @@ client.on('message', message => {
 	const command = args.shift().toLowerCase();
 	
 	//print args and command to console for testing
-	client.log("Command: " + command);
-	client.log("Arg 1 : " + args[1]);
-	client.log("Arg 2 : " + args[2]);
+	console.log("Command: " + command);
+	console.log("Arg 1 : " + args[1]);
+	console.log("Arg 2 : " + args[2]);
 	
     //command 1
     if(message.content.startsWith(prefix + 'hi')){
