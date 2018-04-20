@@ -38,8 +38,8 @@ client.on('message', message => {
 	
 	//print args and command to console for testing
 	console.log("Command: " + command);
-	console.log("Arg 1 : " + args[1]);
-	console.log("Arg 2 : " + args[2]);
+	console.log("Arg 1 : " + args[0]);
+	console.log("Arg 2 : " + args[1]);
 	
     //command 1
     if(message.content.startsWith(prefix + 'hi')){
