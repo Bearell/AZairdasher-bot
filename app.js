@@ -32,8 +32,8 @@ client.on('ready',() => {
 					console.log("Role removed from ${member.user.tag}.");
 				});
 			}
-		}
-	}, 5000)
+		}, 5000)
+	});
 	
 });
 
