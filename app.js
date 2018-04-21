@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const token = require('./settings.json').token;
+const fs = require("fs");
+
+client.uat = require("./uat.json");
 
 client.on('ready',() => {
     console.log("UAT Bot has logged on");
@@ -8,6 +11,30 @@ client.on('ready',() => {
     /* For changing bot's username, only run once per name change
     client.user.setUsername("Robo-ky");
     */
+	
+	//check uat timer
+	client.setInterval(() => {
+		for(let i in client.uat {
+			let time = client.uat[i].time;
+			let guildId = client.uat[i].guild;
+			let guild = client.guilds.get(guildId);
+			let member = guild.members.get(i);
+			let mutedRole = "374686400307789824";
+			
+			if(Date.now() > time) {
+				console.log("${i} is now free from UAT!");
+				
+				member.removeRole("374686400307789824");
+				delete client.uat[i];
+				
+				fs.writeFile("./uat.json", JSON.stringify(client.uat), err => {
+					if(err) throw err;
+					console.log("Role removed from ${member.user.tag}.");
+				});
+			}
+		}
+	}, 5000)
+	
 });
 
 //prefix for bot commands
@@ -37,6 +64,8 @@ client.on('message', message => {
 	const command = args.shift().toLowerCase();
 	
 	//print args and command to console for testing
+	console.log("---");
+	console.log("User: " + message.author.username);
 	console.log("Command: " + command);
 	console.log("Arg 1 : " + args[0]);
 	console.log("Arg 2 : " + args[1]);
@@ -68,12 +97,33 @@ client.on('message', message => {
                 message.channel.send("User does not exist");
                 return;
             }
-
+			
+			if(prisoner.roles.has("374686400307789824"))
+			{
+				message.channel.send("This user is already in UAT!");
+				return;
+			}
+			
+			//check if no time given, default to 120 seconds
+			if(args[1] == 'undefined')
+			{
+				args[1] = 120
+			}
+			//create what to add to the json file
+			client.uat[prisoner.id] = {
+				guild: message.guild.id,
+				time: Date.now() + parseInt(args[1]) * 1000
+			}
+			
+			fs.writeFile("./uat.json", JSON.stringify(client.uat, null, 4), err => {
+				if(err) throw err;
+			});
+			
             prisoner.addRole("374686400307789824").catch(console.error);
 
             message.channel.send("Sending " + prisoner.displayName + " to UAT");
             message.channel.send({files: ["./images/uat.jpg"]});
-            message.guild.channels.find("name", "uat").send("Welcome to UAT, " + prisoner.displayName + ". You're locked up for...[ETERNITY]");
+            message.guild.channels.find("name", "uat").send("Welcome to UAT, " + prisoner.displayName + ". You're locked up for... " + args[1] + " seconds!");
         }
 
         else 
@@ -94,9 +144,15 @@ client.on('message', message => {
                 message.channel.send("User does not exist");
                 return;
             }
-
-            prisoner.removeRole("374686400307789824").catch(console.error);
+			
+			delete client.uat[prisoner.id];
+			fs.writeFile("./uat.json", JSON.stringify(client.uat), err => {
+					if(err) throw err;
+					console.log("Role removed from ${member.user.tag}.");
+				});
             
+            prisoner.removeRole("374686400307789824").catch(console.error);
+
             message.channel.send(prisoner.displayName + " was freed from UAT");
         }
 
