@@ -14,7 +14,7 @@ client.on('ready',() => {
 	
 	//check uat timer
 	client.setInterval(() => {
-		for(let i in client.uat {
+		for(let i in client.uat) {
 			let time = client.uat[i].time;
 			let guildId = client.uat[i].guild;
 			let guild = client.guilds.get(guildId);
@@ -29,11 +29,11 @@ client.on('ready',() => {
 				
 				fs.writeFile("./uat.json", JSON.stringify(client.uat), err => {
 					if(err) throw err;
-					console.log("Role removed from ${member.user.tag}.");
+					console.log("Role removed from " + member.user.tag + ".");
 				});
 			}
-		}, 5000)
-	});
+		}
+	}, 5000);
 	
 });
 
@@ -105,7 +105,7 @@ client.on('message', message => {
 			}
 			
 			//check if no time given, default to 120 seconds
-			if(args[1] == 'undefined')
+			if(args[1] == undefined)
 			{
 				args[1] = 120
 			}
@@ -122,7 +122,10 @@ client.on('message', message => {
             prisoner.addRole("374686400307789824").catch(console.error);
 
             message.channel.send("Sending " + prisoner.displayName + " to UAT");
-            message.channel.send({files: ["./images/uat.jpg"]});
+            message.channel.send({files: ["./images/uat.jpg"]})
+			.then(msg => {
+				msg.delete(5000)
+			});
             message.guild.channels.find("name", "uat").send("Welcome to UAT, " + prisoner.displayName + ". You're locked up for... " + args[1] + " seconds!");
         }
 
@@ -148,7 +151,7 @@ client.on('message', message => {
 			delete client.uat[prisoner.id];
 			fs.writeFile("./uat.json", JSON.stringify(client.uat), err => {
 					if(err) throw err;
-					console.log("Role removed from ${member.user.tag}.");
+					console.log("Role removed from " + prisoner.user.tag + ".");
 				});
             
             prisoner.removeRole("374686400307789824").catch(console.error);
