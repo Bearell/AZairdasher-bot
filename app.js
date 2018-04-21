@@ -4,6 +4,7 @@ const token = require('./settings.json').token;
 const fs = require("fs");
 
 client.uat = require("./uat.json");
+client.devincoin = require("./devincoin.json");
 
 client.on('ready',() => {
     console.log("UAT Bot has logged on");
@@ -64,8 +65,9 @@ client.on('message', message => {
 	const command = args.shift().toLowerCase();
 	
 	//print args and command to console for testing
+	let commander = message.author;
 	console.log("---");
-	console.log("User: " + message.author.username);
+	console.log("User: " + commander.username);
 	console.log("Command: " + command);
 	console.log("Arg 1 : " + args[0]);
 	console.log("Arg 2 : " + args[1]);
@@ -165,6 +167,29 @@ client.on('message', message => {
     //command 6
     if(message.content.startsWith(prefix + "comfy"))
     {
+		if(!client.devincoin[commander.id])
+		{
+		//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[commander.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+		}
+		
+		if(client.devincoin[commander.id].devincoins < 1){
+			message.channel.send("You've not enough devincoins. Begone, peasant.");
+			return;
+		}
+		//decrease devinco
+		client.devincoin[commander.id].devincoins--;
+		
+		fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+	
         var rand = Math.floor((Math.random() * 1000) + 1);
         var picture;
 
@@ -172,11 +197,19 @@ client.on('message', message => {
         {
             message.channel.send("SSR COMFY!!!");
             picture = "./images/comfiest.jpg";
+			client.devincoin[commander.id].devincoins += 1000;
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
         }
         else if (rand > 1 && rand <= 60 )
         {
             rand = Math.floor((Math.random() * 10) + 1);
             picture = "./images/SRcomfy" + rand + ".jpg";
+			client.devincoin[commander.id].devincoins += 15;
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
         }
         else
         {
@@ -186,7 +219,64 @@ client.on('message', message => {
         
         message.channel.send({files: [picture]});
     }
+	
+	//command 7
+	if(command == "devincoins" || command == "devincoin")
+	{
+		
+		if(!client.devincoin[commander.id])
+		{
+		//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[commander.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+		}
+		
+		message.channel.send("You have " + client.devincoin[commander.id].devincoins + " devincoins.");
+	}
+	
+	//command 8
+	if(command == "award")
+	{
+		if(message.member.roles.find("name", "admins"))
+        {
+			let prisoner = message.mentions.members.first();
 
+            if(prisoner == null)
+            {
+                message.channel.send("User does not exist");
+                return;
+            }
+			
+			if(!client.devincoin[prisoner.id])
+			{
+			//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[prisoner.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+			}
+			
+			client.devincoin[prisoner.id] = {
+				devincoins: client.devincoin[prisoner.id].devincoins + parseInt(args[1])
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+			message.channel.send("Devincoins awarded.");
+			
+		
+		
+		}
+	}
     /*
     if(message.content.startsWith(prefix + "findRole")){
         if(message.member.roles.find("name", "admins")){
