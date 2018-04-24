@@ -224,7 +224,7 @@ client.on('message', message => {
 			//create what to add to the json file
 			client.uat[message.member.id] = {
 				guild: message.guild.id,
-				time: Date.now() + parseInt(args[1]) * 1000
+				time: Date.now() + parseInt(120) * 1000
 			}
 			
 			fs.writeFile("./uat.json", JSON.stringify(client.uat, null, 4), err => {
