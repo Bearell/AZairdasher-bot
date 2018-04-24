@@ -183,6 +183,13 @@ client.on('message', message => {
 			message.channel.send("You've not enough devincoins. Begone, peasant.");
 			return;
 		}
+		
+		if(message.member.roles.has("374686400307789824"))
+			{
+				message.channel.send("Prisoners don't get to be comfy!");
+				return;
+			}
+		
 		//decrease devinco
 		client.devincoin[commander.id].devincoins--;
 		
@@ -206,11 +213,27 @@ client.on('message', message => {
         {
             rand = Math.floor((Math.random() * 10) + 1);
             picture = "./images/SRcomfy" + rand + ".jpg";
-			client.devincoin[commander.id].devincoins += 15;
+			client.devincoin[commander.id].devincoins += 10;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
 			});
         }
+		else if (rand > 60 && rand <= 100) //uat
+		{
+			picture = "./images/uat.jpg";
+			//create what to add to the json file
+			client.uat[message.member.id] = {
+				guild: message.guild.id,
+				time: Date.now() + parseInt(args[1]) * 1000
+			}
+			
+			fs.writeFile("./uat.json", JSON.stringify(client.uat, null, 4), err => {
+				if(err) throw err;
+			});
+			
+            message.member.addRole("374686400307789824").catch(console.error);
+            message.guild.channels.find("name", "uat").send("Welcome to UAT, " + message.member.displayName + ". You're locked up for... " + 120 + " seconds!");
+		}
         else
         {
             rand = Math.floor((Math.random() * 42) + 1);
@@ -218,7 +241,7 @@ client.on('message', message => {
         }
         
         message.channel.send({files: [picture]});
-    }
+    } else
 	
 	//command 7
 	if(command == "devincoins" || command == "devincoin")
@@ -237,7 +260,7 @@ client.on('message', message => {
 		}
 		
 		message.channel.send("You have " + client.devincoin[commander.id].devincoins + " devincoins.");
-	}
+	} else
 	
 	//command 8
 	if(command == "award")
