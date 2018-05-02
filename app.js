@@ -299,6 +299,33 @@ client.on('message', message => {
 		
 		
 		}
+	} else
+
+	//command 9
+	if(command == "role")
+	{
+		let role = message.guild.roles.find("name", args[1]);
+
+		if(!role){
+			message.channel.send("I do not know that role");
+			return;
+		}
+
+		if(args[0] == "add" || args[0] == "Add")
+		{
+			message.member.addRole(role).catch(console.error);
+			message.channel.send("You have been added to the role, " + role.name);
+		}
+
+		else if (args[0] == "remove" || args[0] == "Remove")
+		{
+			message.member.removeRole(role).catch(console.error);
+			message.channel.send("You have been removed from the role, " + role.name);
+		}
+
+		else {
+			message.channel.send("I do not know that command.");
+		}
 	}
     /*
     if(message.content.startsWith(prefix + "findRole")){
