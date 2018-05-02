@@ -311,6 +311,11 @@ client.on('message', message => {
 			return;
 		}
 
+		if(role == "Sent to UAT (Muted)"){
+			message.channel.send("Why would you want to go to UAT...")
+			return;
+		}
+
 		if(args[0] == "add" || args[0] == "Add")
 		{
 			message.member.addRole(role).catch(console.error);
