@@ -79,7 +79,9 @@ client.on('message', message => {
 
     //command 2
     if(message.content.startsWith(prefix + 'un')){
-        message.channel.send("<:un:397192404127711234>");
+        //message.channel.send("<:un:397192404127711234>");
+		unFile = "./images/un.png";
+		message.channel.send({files: [unFile]});
     } else
     
     //command 3
@@ -100,6 +102,12 @@ client.on('message', message => {
                 return;
             }
 			
+			if(prisoner.roles.has("377626418349080595"))
+			{
+				message.channel.send("Upupupu...");
+				return;
+			}
+			
 			if(prisoner.roles.has("374686400307789824"))
 			{
 				message.channel.send("This user is already in UAT!");
@@ -111,6 +119,13 @@ client.on('message', message => {
 			{
 				args[1] = 120
 			}
+			
+			//if NaN set to 120
+			if(isNaN(parseInt(args[1])))
+			{
+				args[1] = 120
+			}
+			
 			//create what to add to the json file
 			client.uat[prisoner.id] = {
 				guild: message.guild.id,
@@ -133,7 +148,74 @@ client.on('message', message => {
 
         else 
         {
-            message.channel.send("Only admins can send members to UAT");
+			let prisoner = message.mentions.members.first();
+
+            if(prisoner == null)
+            {
+                message.channel.send("User does not exist");
+                return;
+            }
+			
+			if(prisoner.roles.has("377626418349080595"))
+			{
+				message.channel.send("Upupupu...");
+				return;
+			}
+			
+			if(prisoner.roles.has("374686400307789824"))
+			{
+				message.channel.send("This user is already in UAT!");
+				return;
+			}
+			
+            //message.channel.send("Only admins can send members to UAT");
+			if(!client.devincoin[commander.id])
+			{
+				//if no data exists on the user, add the user with base amount of 10 coins
+				client.devincoin[commander.id] = {
+					devincoins: 10
+				}
+			
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+					if(err) throw err;
+				});
+			}
+		
+			if(client.devincoin[commander.id].devincoins < 25){
+				message.channel.send("You've not enough devincoins. Begone, peasant.");
+				return;
+			}
+		
+			if(message.member.roles.has("374686400307789824"))
+			{
+				message.channel.send("Prisoners don't get to UAT people!");
+				return;
+			}
+			//decrease devinco
+			client.devincoin[commander.id].devincoins -= 25;
+		
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			
+			//create what to add to the json file
+			client.uat[prisoner.id] = {
+				guild: message.guild.id,
+				time: Date.now() + 120 * 1000
+			}
+			
+			fs.writeFile("./uat.json", JSON.stringify(client.uat, null, 4), err => {
+				if(err) throw err;
+			});
+			
+            prisoner.addRole("374686400307789824").catch(console.error);
+
+            message.channel.send("Sending " + prisoner.displayName + " to UAT");
+            message.channel.send({files: ["./images/uat.jpg"]})
+			.then(msg => {
+				msg.delete(5000)
+			});
+            message.guild.channels.find("name", "uat").send("Welcome to UAT, " + prisoner.displayName + ". You're locked up for... " + 120 + " seconds!");
         }
     } else
 
@@ -211,7 +293,7 @@ client.on('message', message => {
         }
         else if (rand > 1 && rand <= 60 )
         {
-            rand = Math.floor((Math.random() * 10) + 1);
+            rand = Math.floor((Math.random() * 11) + 1);
             picture = "./images/SRcomfy" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 10;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
@@ -244,7 +326,7 @@ client.on('message', message => {
     } else
 	
 	//command 7
-	if(command == "devincoins" || command == "devincoin")
+	if(command == "devincoins")
 	{
 		
 		if(!client.devincoin[commander.id])
@@ -265,6 +347,13 @@ client.on('message', message => {
 	//command 8
 	if(command == "award")
 	{
+		//if NaN return
+		if(isNaN(parseInt(args[1])))
+		{
+			message.channel.send("Invalid amount.");
+			return;
+		}
+			
 		if(message.member.roles.find("name", "admins"))
         {
 			let prisoner = message.mentions.members.first();
@@ -326,7 +415,154 @@ client.on('message', message => {
 		else {
 			message.channel.send("I do not know that command.");
 		}
-	}
+	} else
+
+	//comand 10
+	    //command RPS GAME
+    if(message.content.startsWith(prefix + "rock") || message.content.startsWith(prefix + "paper") || message.content.startsWith(prefix + "scissors"))
+    {
+		if(!client.devincoin[commander.id])
+		{
+		//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[commander.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+		}
+		
+		if(args[0] == undefined)
+			{
+				args[0] = 1
+			}
+		
+		if(isNaN(parseInt(args[0])) || args[0] <= 0 || Math.floor(args[0]) == 0)
+		{
+			message.channel.send("Invalid amount.");
+			return;
+		}
+		
+		let rpsbet = parseInt(args[0]);
+		
+		if(client.devincoin[commander.id].devincoins < rpsbet){
+			message.channel.send("Don't be challenging me if you can't front the money!");
+			return;
+		}
+		
+		if(message.member.roles.has("374686400307789824"))
+			{
+				message.channel.send("Prisoners don't get to play games!");
+				return;
+			}
+		
+		//decrease devinco
+		client.devincoin[commander.id].devincoins -= rpsbet;
+		
+		fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+	
+        var randRPS = Math.floor((Math.random() * 3) + 1);
+        var pictureRPS;
+
+		if(randRPS == 1)
+		{
+			pictureRPS = "./images/scissors.jpg";
+			if(message.content.startsWith(prefix + "rock"))
+			{
+				//message.channel.send("You beat me!");
+				client.devincoin[commander.id].devincoins += 2 * rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "scissors"))
+			{
+				//message.channel.send("Double KO!");
+				client.devincoin[commander.id].devincoins += rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "paper"))
+			{
+				//message.channel.send("You lose!");
+				//client.devincoin[commander.id].devincoins += 0;
+				//fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				//if(err) throw err;
+				//});
+			}
+		}
+		else if(randRPS == 2)
+		{
+			pictureRPS = "./images/rock.jpg";
+			if(message.content.startsWith(prefix + "paper"))
+			{
+				//message.channel.send("You beat me!");
+				client.devincoin[commander.id].devincoins += 2 * rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "rock"))
+			{
+				//message.channel.send("Double KO!");
+				client.devincoin[commander.id].devincoins += rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "scissors"))
+			{
+				//message.channel.send("You lose!");
+				//client.devincoin[commander.id].devincoins += 0;
+				//fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				//if(err) throw err;
+				//});
+			}
+			
+		}
+		else if(randRPS == 3)
+		{
+			pictureRPS = "./images/paper.jpg";
+			if(message.content.startsWith(prefix + "scissors"))
+			{
+				//message.channel.send("You beat me!");
+				client.devincoin[commander.id].devincoins += 2*rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "paper"))
+			{
+				//message.channel.send("Double KO!");
+				client.devincoin[commander.id].devincoins += rpsbet;
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+				});
+			}
+			else if(message.content.startsWith(prefix + "rock"))
+			{
+				//message.channel.send("You lose!");
+				//client.devincoin[commander.id].devincoins += 0;
+				//fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				//if(err) throw err;
+				//});
+			}
+		}
+		else
+		{
+			message.channel.send("Hang on! I'm not ready!");
+		}
+        message.channel.send({files: [pictureRPS]});
+    }
+
+
+
+
+
     /*
     if(message.content.startsWith(prefix + "findRole")){
         if(message.member.roles.find("name", "admins")){
