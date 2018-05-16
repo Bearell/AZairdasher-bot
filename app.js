@@ -563,6 +563,13 @@ client.on('message', message => {
 		}
         message.channel.send({files: [pictureRPS]});
     }
+	else
+	//command nu
+	if(message.content.startsWith(prefix + 'nu')){
+        //message.channel.send("<:un:397192404127711234>");
+		unFile = "./images/nu.png";
+		message.channel.send({files: [unFile]});
+    }
 
 
 
