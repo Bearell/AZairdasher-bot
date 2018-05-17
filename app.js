@@ -267,9 +267,7 @@ client.on('message', message => {
 			}
 			//decrease devinco
 			let bursttime = client.devincoin[commander.id].devincoins*4 + 22;
-			client.devincoin[commander.id] = {
-				devincoins: 0)
-			}
+			client.devincoin[commander.id].devincoins = 0;
 		
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
@@ -712,7 +710,7 @@ client.on('message', message => {
 	{
 		message.channel.send("Hang on! I'm not ready!");
 	}*/
-}
+
 
 
 
