@@ -138,7 +138,7 @@ client.on('message', message => {
 			
             prisoner.addRole("374686400307789824").catch(console.error);
 
-            message.channel.send("Sending " + prisoner.displayName + " to UAT");
+            message.channel.send("Sending " + prisoner.displayName + " to UAT for " + args[1] + " seconds!");
             message.channel.send({files: ["./images/uat.jpg"]})
 			.then(msg => {
 				msg.delete(5000)
@@ -210,7 +210,7 @@ client.on('message', message => {
 			
             prisoner.addRole("374686400307789824").catch(console.error);
 
-            message.channel.send("Sending " + prisoner.displayName + " to UAT");
+            message.channel.send("Sending " + prisoner.displayName + " to UAT for 120 seconds!");
             message.channel.send({files: ["./images/uat.jpg"]})
 			.then(msg => {
 				msg.delete(5000)
@@ -285,7 +285,7 @@ client.on('message', message => {
 			
             prisoner.addRole("374686400307789824").catch(console.error);
 
-            message.channel.send("Sending " + prisoner.displayName + " to UAT");
+            message.channel.send("Sending " + prisoner.displayName + " to UAT for " + bursttime + " seconds!");
             message.channel.send({files: ["./images/uat.jpg"]})
 			.then(msg => {
 				msg.delete(5000)
