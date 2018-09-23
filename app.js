@@ -357,25 +357,27 @@ client.on('message', message => {
         var rand = Math.floor((Math.random() * 1000) + 1);
         var picture;
 
-        if(rand == 1)
+        if(rand >=1 && rand <= 3)
         {
-            message.channel.send("SSR COMFY!!!");
-            picture = "./images/comfiest.jpg";
+			message.channel.send("SSR COMFY!!!");
+			rand = Math.floor((Math.random() * 3) +1);
+            picture = "./images/comfiest" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 1000;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
 			});
         }
-        else if (rand > 1 && rand <= 60 )
+        else if (rand > 3 && rand <= 63)
         {
-            rand = Math.floor((Math.random() * 11) + 1);
+			message.channel.send("SR COMFY!!!");
+            rand = Math.floor((Math.random() * 17) + 1);
             picture = "./images/SRcomfy" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 10;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
 			});
         }
-		else if (rand > 60 && rand <= 100) //uat
+		else if (rand > 63 && rand <= 103) //uat
 		{
 			picture = "./images/uat.jpg";
 			//create what to add to the json file
@@ -393,7 +395,7 @@ client.on('message', message => {
 		}
         else
         {
-            rand = Math.floor((Math.random() * 42) + 1);
+            rand = Math.floor((Math.random() * 55) + 1);
             picture = "./images/comfy" + rand + ".jpg";
         }
         
