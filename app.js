@@ -347,27 +347,29 @@ client.on('message', message => {
 				return;
 			}
 		
-		//decrease devinco
+		//decrease devincoin
 		client.devincoin[commander.id].devincoins--;
 		
 		fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
 			});
 	
-        var rand = Math.floor((Math.random() * 1000) + 1);
+		//begin gacha
+        var rand = Math.floor((Math.random() * 100) + 1);
         var picture;
 
+		//case SSR, 3% chance
         if(rand >=1 && rand <= 3)
         {
 			message.channel.send("SSR COMFY!!!");
 			rand = Math.floor((Math.random() * 3) +1);
             picture = "./images/comfiest" + rand + ".jpg";
-			client.devincoin[commander.id].devincoins += 1000;
+			client.devincoin[commander.id].devincoins += 100;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
 			});
         }
-        else if (rand > 3 && rand <= 63)
+        else if (rand > 3 && rand <= 9)	//case SR, 6% chance
         {
 			message.channel.send("SR COMFY!!!");
             rand = Math.floor((Math.random() * 17) + 1);
@@ -377,7 +379,7 @@ client.on('message', message => {
 				if(err) throw err;
 			});
         }
-		else if (rand > 63 && rand <= 103) //uat
+		else if (rand > 9 && rand <= 13) //case uat, 4% chance
 		{
 			picture = "./images/uat.jpg";
 			//create what to add to the json file
@@ -393,12 +395,13 @@ client.on('message', message => {
             message.member.addRole("374686400307789824").catch(console.error);
             message.guild.channels.find("name", "uat").send("Welcome to UAT, " + message.member.displayName + ". You're locked up for... " + 120 + " seconds!");
 		}
-        else
+        else	//case normal
         {
             rand = Math.floor((Math.random() * 55) + 1);
             picture = "./images/comfy" + rand + ".jpg";
         }
-        
+		
+		//send comfy image to channel
         message.channel.send({files: [picture]});
     } else
 	
