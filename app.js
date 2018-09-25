@@ -502,8 +502,8 @@ client.on('message', message => {
 		}
 	} else
 
-	//comand 10
-	    //command RPS GAME
+	//command 10
+	//command RPS GAME
     if(message.content.startsWith(prefix + "rock") || message.content.startsWith(prefix + "paper") || message.content.startsWith(prefix + "scissors"))
     {
 		if(!client.devincoin[commander.id])
@@ -642,16 +642,23 @@ client.on('message', message => {
 			message.channel.send("Hang on! I'm not ready!");
 		}
         message.channel.send({files: [pictureRPS]});
-    }
-	else
+	}else
+	
 	//command nu
 	if(message.content.startsWith(prefix + 'nu')){
         //message.channel.send("<:un:397192404127711234>");
 		unFile = "./images/nu.png";
 		message.channel.send({files: [unFile]});
-    }
-	//else
+	}else
+	
+	//command ok
+	if(message.content.startsWith(prefix + "ok")){
+		okFile = "./images/ok.png";
+		message.channel.send({files: [okFile]});
+	}//else
 		
+
+
 	//Command Steal Game
 	/*if(message.content.startsWith(prefix + "steal"))
 	{
@@ -715,11 +722,6 @@ client.on('message', message => {
 	{
 		message.channel.send("Hang on! I'm not ready!");
 	}*/
-
-
-
-
-
 
     /*
     if(message.content.startsWith(prefix + "findRole")){
