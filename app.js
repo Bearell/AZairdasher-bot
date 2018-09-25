@@ -363,7 +363,7 @@ client.on('message', message => {
         {
 			message.channel.send("SSR COMFY!!!");
 			rand = Math.floor((Math.random() * 3) +1);
-            picture = "./images/comfiest" + rand + ".jpg";
+            picture = "./images/gacha/comfiest" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 100;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
@@ -373,7 +373,7 @@ client.on('message', message => {
         {
 			message.channel.send("SR COMFY!!!");
             rand = Math.floor((Math.random() * 17) + 1);
-            picture = "./images/SRcomfy" + rand + ".jpg";
+            picture = "./images/gacha/SRcomfy" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 10;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 				if(err) throw err;
@@ -398,7 +398,7 @@ client.on('message', message => {
         else	//case normal
         {
             rand = Math.floor((Math.random() * 55) + 1);
-            picture = "./images/comfy" + rand + ".jpg";
+            picture = "./images/gacha/comfy" + rand + ".jpg";
         }
 		
 		//send comfy image to channel
