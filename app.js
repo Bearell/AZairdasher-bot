@@ -37,11 +37,11 @@ client.on('ready',() => {
 		}
 		
 		//devincrash interval
-		let time = client.devincrash.[4523].time;
+		let time = client.devincrash.["4523"].time;
 		if(Date.now() > time)
 		{
 			console.log("Devincrash initiated.")
-			client.devincrash[4523] = {
+			client.devincrash["4523"] = {
 				state: 2
 			}
 			fs.writeFile("./devincrash.json", JSON.stringify(client.devincrash, null, 4), err => {
@@ -767,7 +767,7 @@ client.on('message', message => {
 		
 		if(args[1] == "bet")
 		{
-			if(client.devincrash[4523].state == 2)
+			if(client.devincrash["4523"].state == 2)
 			{
 				message.channel.send("Please wait the current game to finish.");
 				return;
@@ -805,11 +805,11 @@ client.on('message', message => {
 				});
 				message.channel.send("Bet successfully added.");
 				
-				if(!client.devincrash[4523].state)
+				if(!client.devincrash["4523"].state)
 				{
 					//check status of crash
 					message.channel.send("Taking bets for 30 more seconds before the game starts!");
-					client.devincrash[4523] = {
+					client.devincrash["4523"] = {
 						state: 1
 						time: Date.now() + 30000
 					}
