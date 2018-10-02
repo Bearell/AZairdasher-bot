@@ -5,7 +5,6 @@ const fs = require("fs");
 
 client.uat = require("./uat.json");
 client.devincoin = require("./devincoin.json");
-client.devincrash = require("./devincrash.json");
 
 client.on('ready',() => {
     console.log("UAT Bot has logged on");
@@ -35,20 +34,6 @@ client.on('ready',() => {
 				});
 			}
 		}
-		
-		//devincrash interval
-		let time = client.devincrash.["4523"].time;
-		if(Date.now() > time)
-		{
-			console.log("Devincrash initiated.")
-			client.devincrash["4523"] = {
-				state: 2
-			}
-			fs.writeFile("./devincrash.json", JSON.stringify(client.devincrash, null, 4), err => {
-				if(err) throw err;
-			});
-		}
-		
 	}, 5000);
 	
 });
@@ -736,99 +721,8 @@ client.on('message', message => {
 				message.channel.send("Transfer Failed.");
 			}
 			
-	}else
-		
-	//command devincrash
-	if(command == "devincrash")
-	{
-		if(!client.devincoin[commander.id])
-		{
-			//if no data exists on the user, add the user with base amount of 10 coins
-			client.devincoin[commander.id] = {
-				devincoins: 10
-			}
-			
-			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
-				if(err) throw err;
-			});
-		}
-		
-		if (message.channel.id != "438187766560325635")
-		{
-			message.channel.send("Please use the #bot-spam channel only.")
-			return;
-		}
-		
-		if(args[1] == "help")
-		{
-			message.channel.send("How to play DevinCrash: \n Devincrash is a game where a multiplier gradually builds in size faster and faster as time passes, until the entire game crashes at a random point in time. The objective of the game is to 'pull' your bet before the crash happens, earning you a multiplier on the bet you put in. \n Commands: \n !devincrash help - displays this message \n !devincrash bet - adds a bet to the next round of devin crash \n !devincrash pull - pulls your bet during a round of devin crash.");
-			return;
-		}
-		
-		if(args[1] == "bet")
-		{
-			if(client.devincrash["4523"].state == 2)
-			{
-				message.channel.send("Please wait the current game to finish.");
-				return;
-			}
-			//if NaN return
-			if(isNaN(parseInt(args[2])))
-			{
-				message.channel.send("Invalid amount.");
-				return;
-			}
-			if(parseInt(args[2]) < 1){
-				message.channel.send("Invalid amount.");
-				return;
-			}
-			if(client.devincoin[commander.id].devincoins < parseInt(args[2]))
-			{
-				message.channel.send("Come back with more money!");
-				return;
-			}
-			if(!client.devincrash[commander.id])
-			{
-				//check if bet is already set
-				client.devincrash[commander.id] = {
-					bet: parseInt(args[2])
-				}
-				fs.writeFile("./devincrash.json", JSON.stringify(client.devincrash, null, 4), err => {
-					if(err) throw err;
-				});
-				client.devincoin[commander.id] = {
-					devincoins: client.devincoin[commander.id].devincoins - parseInt(args[2])
-				}
-			
-				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
-					if(err) throw err;
-				});
-				message.channel.send("Bet successfully added.");
-				
-				if(!client.devincrash["4523"].state)
-				{
-					//check status of crash
-					message.channel.send("Taking bets for 30 more seconds before the game starts!");
-					client.devincrash["4523"] = {
-						state: 1
-						time: Date.now() + 30000
-					}
-					fs.writeFile("./devincrash.json", JSON.stringify(client.devincrash, null, 4), err => {
-						if(err) throw err;
-					});
-					
-				}
-				
-				return;
-			}
-			else
-			{
-				message.channel.send("Can't change bets!");
-				return;
-			}
-		}
-		
 	}//else
+
 	//Command Steal Game
 	/*if(message.content.startsWith(prefix + "steal"))
 	{
