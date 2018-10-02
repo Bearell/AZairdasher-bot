@@ -66,15 +66,15 @@ client.on('message', message => {
 	
 	//print args and command to console for testing
 	let commander = message.author;
-	console.log("---");
-	console.log("User: " + commander.username);
-	console.log("Command: " + command);
-	console.log("Arg 1 : " + args[0]);
-	console.log("Arg 2 : " + args[1]);
+	console.log("\n---");
+	console.log("\nUser: " + commander.username);
+	console.log("\nCommand: " + command);
+	console.log("\nArg 1 : " + args[0]);
+	console.log("\nArg 2 : " + args[1]);
 	
     //command 1
     if(message.content.startsWith(prefix + 'hi')){
-        message.channel.send("Hello, I am Jimmy Bot");
+        message.channel.send("Hello, I'm the Jimmy Bot now.");
     } else
 
     //command 2
@@ -86,7 +86,7 @@ client.on('message', message => {
     
     //command 3
     if(message.content.startsWith(prefix + "upset")){
-        message.channel.send("I'm not upset");
+        message.channel.send("I'm still not upset");
     } else
 
     //command 4 -- UAT roleID: 374686400307789824
@@ -655,9 +655,69 @@ client.on('message', message => {
 	if(message.content.startsWith(prefix + "ok")){
 		okFile = "./images/ok.png";
 		message.channel.send({files: [okFile]});
-	}//else
+	}else
 		
+	//command give
+	if(command == "give")
+	{
+		//if NaN return
+		if(isNaN(parseInt(args[1])))
+		{
+			message.channel.send("Invalid amount.");
+			return;
+		}
+		if(parseInt(args[1]) < 1){
+			message.channel.send("Invalid amount.");
+			return;
+		}
+			let prisoner = message.mentions.members.first();
 
+            if(prisoner == null)
+            {
+                message.channel.send("Invalid User.");
+                return;
+            }
+			
+			if(!client.devincoin[commander.id])
+			{
+			//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[commander.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+			}
+			
+			if(!client.devincoin[prisoner.id])
+			{
+				
+			//if no data exists on the user, add the user with base amount of 10 coins
+			client.devincoin[prisoner.id] = {
+				devincoins: 10
+			}
+			
+			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+				if(err) throw err;
+			});
+			}
+			
+			if(client.devincoin[commander.id].devincoins >= parseInt(args[1]))
+			{
+				client.devincoin[prisoner.id] = {
+					devincoins: client.devincoin[prisoner.id].devincoins + parseInt(args[1])
+				}
+				client.devincoin[commander.id] = {
+					devincoins: client.devincoin[commander.id].devincoins - parseInt(args[1])
+				}
+			
+				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
+					if(err) throw err;
+				});
+			}
+			message.channel.send("Devincoins transferred.");
+	}//else
 
 	//Command Steal Game
 	/*if(message.content.startsWith(prefix + "steal"))
