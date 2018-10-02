@@ -37,7 +37,7 @@ client.on('ready',() => {
 		}
 		
 		//devincrash interval
-		let time = client.devincrash.4523.time;
+		let time = client.devincrash.[4523].time;
 		if(Date.now() > time)
 		{
 			console.log("Devincrash initiated.")
