@@ -358,8 +358,8 @@ client.on('message', message => {
         var rand = Math.floor((Math.random() * 100) + 1);
         var picture;
 
-		//case SSR, 3% chance
-        if(rand >=1 && rand <= 3)
+		//case SSR, 1% chance
+        if(rand == 1)
         {
 			message.channel.send("SSR COMFY!!!");
 			rand = Math.floor((Math.random() * 3) +1);
