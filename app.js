@@ -67,10 +67,10 @@ client.on('message', message => {
 	//print args and command to console for testing
 	let commander = message.author;
 	console.log("\n---");
-	console.log("\nUser: " + commander.username);
-	console.log("\nCommand: " + command);
-	console.log("\nArg 1 : " + args[0]);
-	console.log("\nArg 2 : " + args[1]);
+	console.log("User: " + commander.username);
+	console.log("Command: " + command);
+	console.log("Arg 1 : " + args[0]);
+	console.log("Arg 2 : " + args[1]);
 	
     //command 1
     if(message.content.startsWith(prefix + 'hi')){
@@ -715,8 +715,12 @@ client.on('message', message => {
 				fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
 					if(err) throw err;
 				});
+				
+				message.channel.send("Devincoins transferred.");
+			}else{
+				message.channel.send("Transfer Failed.");
 			}
-			message.channel.send("Devincoins transferred.");
+			
 	}//else
 
 	//Command Steal Game
