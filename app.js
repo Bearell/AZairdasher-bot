@@ -372,7 +372,7 @@ client.on('message', message => {
         else if (rand > 3 && rand <= 9)	//case SR, 6% chance
         {
 			message.channel.send("SR COMFY!!!");
-            rand = Math.floor((Math.random() * 19) + 1);
+            rand = Math.floor((Math.random() * 18) + 1);
             picture = "./images/gacha/SRcomfy" + rand + ".jpg";
 			client.devincoin[commander.id].devincoins += 10;
 			fs.writeFile("./devincoin.json", JSON.stringify(client.devincoin, null, 4), err => {
