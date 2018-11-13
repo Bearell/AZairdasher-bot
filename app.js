@@ -651,6 +651,13 @@ client.on('message', message => {
 		message.channel.send({files: [unFile]});
 	}else
 	
+	//command comf
+	if(message.content.startsWith(prefix + 'comf')){
+        //message.channel.send("<:un:397192404127711234>");
+		unFile = "./images/comf.png";
+		message.channel.send({files: [unFile]});
+	}else
+		
 	//command ok
 	if(message.content.startsWith(prefix + "ok")){
 		okFile = "./images/ok.png";
